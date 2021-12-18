@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
+import CategoryLabel from './CategoryLabel'
 
 export default function PostPage({ post }) {
   return (
@@ -16,7 +17,7 @@ export default function PostPage({ post }) {
         <span className='text-gray-600 font-light'>
           {post.frontMatter.date}
         </span>
-        <div>{post.frontMatter.category}</div>
+        <CategoryLabel>{post.frontMatter.category}</CategoryLabel>
       </div>
 
       <div className='mt-5'>
