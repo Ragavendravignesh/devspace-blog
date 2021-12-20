@@ -5,7 +5,7 @@ import matter from 'gray-matter'
 import Post from '@/components/Post'
 import { sortByDate } from '@/utils/index'
 
-export default function BlogPage({ posts, category_name }) {
+export default function CategoryPage({ posts, category_name }) {
   return (
     <Layout>
       <h1 className='text-5xl border-b-4 p-5 font-bold'>
