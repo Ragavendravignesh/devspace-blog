@@ -4,27 +4,34 @@ import path from 'path'
 import matter from 'gray-matter'
 
 export default (req, res) => {
-  const files = fs.readdirSync(path.join('posts'))
+  let posts
 
-  const posts = files.map((filename) => {
-    const markdownwithmeta = fs.readFileSync(
-      path.join('posts', filename),
-      'utf-8'
-    )
+  if (process.env.NODE_ENV === 'production') {
+  } else {
+    const files = fs.readdirSync(path.join('posts'))
 
-    const { data: frontmatter } = matter(markdownwithmeta)
+    posts = files.map((filename) => {
+      const slug = filename.replace('.md', '')
 
-    return {
-      frontmatter,
-    }
-  })
+      const markdownwithmeta = fs.readFileSync(
+        path.join('posts', filename),
+        'utf-8'
+      )
+
+      const { data: frontMatter } = matter(markdownwithmeta)
+
+      return {
+        slug,
+        frontMatter,
+      }
+    })
+  }
 
   const filteredPosts = posts.filter(
-    ({ frontmatter: { title, excerpt, category } }) => {
-        title.toLowerCase().indexOf(req.query.q) != -1||
-        excerpt.toLowerCase().indexOf(req.query.q) != -1 ||
-        category.toLowerCase().indexOf(req.query.q) != -1 
-    }
+    ({ frontMatter: { title, excerpt, category } }) =>
+      title.toLowerCase().indexOf(req.query.q) != -1 ||
+      excerpt.toLowerCase().indexOf(req.query.q) != -1 ||
+      category.toLowerCase().indexOf(req.query.q) != -1
   )
 
   res.status(200).json(JSON.stringify({ filteredPosts }))
